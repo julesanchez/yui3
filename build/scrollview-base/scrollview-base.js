@@ -46,6 +46,8 @@ var getClassName = Y.ClassNameManager.getClassName,
     EASING = 'easing',
     FRAME_DURATION = 'frameDuration',
     BOUNCE_RANGE = 'bounceRange',
+    NESTING = 'nesting',
+
     _constrain = function (val, min, max) {
         return Math.min(Math.max(val, min), max);
     };
@@ -178,6 +180,7 @@ Y.ScrollView = Y.extend(ScrollView, Y.Widget, {
         sv._cBounceRange = sv.get(BOUNCE_RANGE);
         sv._cDeceleration = sv.get(DECELERATION);
         sv._cFrameDuration = sv.get(FRAME_DURATION);
+        sv._cNesting = sv.get(NESTING);
     },
 
     /**
@@ -660,6 +663,10 @@ Y.ScrollView = Y.extend(ScrollView, Y.Widget, {
             sv._cancelFlick();
             sv._onTransEnd();
         }
+
+		if (this._cNesting){
+        	e.stopPropagation();
+		}
 
         // Reset lastScrolledAmt
         sv.lastScrolledAmt = 0;
@@ -1358,6 +1365,17 @@ Y.ScrollView = Y.extend(ScrollView, Y.Widget, {
          */
         bounceRange: {
             value: 150
+        },
+
+        /**
+         * Prevent scrollview from nesting problems
+         *
+         * @attribute nesting
+         * @type Boolean
+         * @default true
+         */
+        nesting: {
+            value: true
         }
     },
 
